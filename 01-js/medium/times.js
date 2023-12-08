@@ -9,5 +9,15 @@ There is no automated test for this one, this is more for you to understand time
 */
 
 function calculateTime(n) {
-    return 0.01;
+  let sum = 0;
+  let startTime = new Date().getUTCSeconds();
+  for (let i = 1; i <= n; i++) sum += n;
+  console.log(
+    "seconds took for counting 1 to",
+    n,
+    "is",
+    new Date().getUTCSeconds() - startTime
+  );
 }
+
+calculateTime(1000000000);

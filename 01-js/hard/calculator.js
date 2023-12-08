@@ -1,5 +1,4 @@
 /*
-  Implement a class `Calculator` having below methods
     - initialise a result variable in the constructor and keep updating it after every arithmetic operation
     - add: takes a number and adds it to the result
     - subtract: takes a number and subtracts it from the result
@@ -16,6 +15,37 @@
   Once you've implemented the logic, test your code by running
 */
 
-class Calculator {}
+class Calculator {
+  constructor() {
+    this.result = 0;
+  }
+  add(num) {
+    this.result += num;
+  }
+  subtract(num) {
+    this.result -= num;
+  }
+  multiply(num) {
+    this.result *= num;
+  }
+  divide(num) {
+    if (num === 0) {
+      throw new Error("can't divide by zero");
+    }
+    this.result /= num;
+  }
+  clear() {
+    this.result = 0;
+  }
+  getResult() {
+    return this.result;
+  }
+  calculate(str) {
+    str = str.replace(/[^a-zA-Z0-9+-/*()]/g, "");
+    this.result = eval(str);
+    if (this.result == Infinity) throw new Error("cant divide by zero");
+    return this.result;
+  }
+}
 
 module.exports = Calculator;
