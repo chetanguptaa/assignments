@@ -5,7 +5,7 @@ const getTime = () => {
   const sec = time.getSeconds();
   let isPastNoon = false;
   if (hour > 12) {
-    hour = hour - 12;
+    hour -= 12;
     isPastNoon = true;
   }
   console.log(
