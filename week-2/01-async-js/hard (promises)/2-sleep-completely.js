@@ -3,6 +3,10 @@
  * During this time the thread should not be able to do anything else.
  */
 
+function sleep(milliseconds) {}
+
+module.exports = sleep;
+
 const busyWait = (milliseconds) => {
   const start = Date.now();
   while (Date.now() - start < milliseconds) {}

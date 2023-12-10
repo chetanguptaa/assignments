@@ -10,7 +10,7 @@ const wait = (n) => {
 };
 
 const main = async () => {
-  await wait(10);
+  wait(10);
   console.log("Hi after 10 secs");
 };
 
@@ -19,3 +19,5 @@ main();
 wait(10).then(() => {
   console.log("Hi after 10 secs");
 });
+
+module.exports = wait;

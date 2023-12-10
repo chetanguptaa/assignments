@@ -1,7 +1,7 @@
 /*
- * Write 3 different functions that return promises that resolve after 1, 2, and 3 seconds respectively.
+ * Write 3 different functions that return promises that resolve after t1, t2, and t3 seconds respectively.
  * Write a function that sequentially calls all 3 of these functions in order.
- * Print out the time it takes to complete the entire operation.
+ * Return a promise chain which return the time in milliseconds it takes to complete the entire operation.
  * Compare it with the results from 3-promise-all.js
  */
 
@@ -11,19 +11,17 @@ function delay(n) {
   });
 }
 
-function waitOneSecond() {
+function wait1(t) {
   return delay(1);
 }
 
-function waitTwoSecond() {
-  return delay(2);
-}
+function waitTwoSecond() {}
 
-function waitThreeSecond() {
+function wait3(t) {
   return delay(3);
 }
 
-async function calculateTime() {
+async function calculateTime(t1, t2, t3) {
   const t1 = new Date();
   await waitOneSecond();
   await waitTwoSecond();
@@ -32,3 +30,5 @@ async function calculateTime() {
 }
 
 calculateTime();
+
+module.exports = calculateTime;
