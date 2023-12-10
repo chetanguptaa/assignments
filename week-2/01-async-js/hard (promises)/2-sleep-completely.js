@@ -3,15 +3,13 @@
  * During this time the thread should not be able to do anything else.
  */
 
-function sleep(milliseconds) {}
+function sleep(milliseconds) {
+  let start = new Date().getTime();
+  let end = start + milliseconds;
+  for (let iter = start; iter <= end; iter = new Date().getTime()) {}
+  return new Promise(function (resolve, reject) {
+    resolve();
+  });
+}
 
 module.exports = sleep;
-
-const busyWait = (milliseconds) => {
-  const start = Date.now();
-  while (Date.now() - start < milliseconds) {}
-};
-
-console.log("Start");
-busyWait(3000);
-console.log("End");
