@@ -39,11 +39,202 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require("express");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const { v4 } = require("uuid");
+
+const app = express();
+
+app.use(bodyParser.json());
+
+app.get("/todos", (req, res) => {
+  try {
+    fs.readFile("./todos.json", "utf-8", (err, data) => {
+      if (err) {
+        res.status(400).json({
+          error: "Error fetching todos",
+        });
+      } else {
+        data = JSON.parse(data);
+        res.status(200).json(data);
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: "Error fetching todos",
+    });
+  }
+});
+
+app.get("/todos/:id", (req, res) => {
+  const id = req.params.id;
+  try {
+    fs.readFile("./todos.json", (err, data) => {
+      if (err) {
+        res.status(400).json({
+          error: "Error fetching todo",
+        });
+      } else {
+        const todos = JSON.parse(data);
+        let todo;
+        for (let i = 0; i < todos.length; i++) {
+          if (todos[i]["id"] === parseInt(id)) {
+            todo = todos[i];
+            break;
+          }
+        }
+        if (todo !== undefined) {
+          res.status(200).json({
+            todo,
+          });
+        } else {
+          res.status(200).json({
+            message: "Todo Does not exist",
+          });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: "Error fetching todos",
+    });
+  }
+});
+
+app.post("/todos", (req, res) => {
+  try {
+    const body = req.body;
+    const todoId = v4();
+    fs.readFile("./todos.json", "utf-8", (err, data) => {
+      if (err) {
+        res.status(404).json({
+          error: "An Error Occured while creating a todo",
+        });
+      } else {
+        data = JSON.parse(data);
+        body.id = todoId;
+        data.push(body);
+        const updatedData = JSON.stringify(data, null, 2);
+        fs.writeFile("./todos.json", updatedData, (err) => {
+          if (err) {
+            res.status(500).json({
+              error: err,
+            });
+          } else {
+            res.status(201).json(todoId);
+          }
+        });
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: "An Error Occoured",
+    });
+  }
+});
+
+app.put("/todos/:id", (req, res) => {
+  const todoId = req.params.id;
+  try {
+    const body = req.body;
+    fs.readFile("./todos.json", "utf-8", (err, data) => {
+      if (err) {
+        res.status(404).json({
+          error: "An Error Occured while creating a todo",
+        });
+      } else {
+        const todos = JSON.parse(data);
+        let todo;
+        let idx;
+        for (let i = 0; i < todos.length; i++) {
+          if (todos[i]["id"] === todoId) {
+            todo = todos[i];
+            idx = i;
+            break;
+          }
+        }
+        if (todo === undefined) {
+          res.status(404).json({
+            message: "Todo Does not exist",
+          });
+        } else {
+          todos.splice(idx, 1);
+          if (body.title) todo.title = body.title;
+          if (body.description) todo.description = body.description;
+          if (body.completed !== undefined) todo.completed = body.completed;
+          todos.push(todo);
+          const updatedTodos = JSON.stringify(todos, null, 2);
+          fs.writeFile("./todos.json", updatedTodos, (err) => {
+            if (err) {
+              res.status(500).json({
+                error: err,
+              });
+            } else {
+              res.status(200).json({
+                message: "Todo updated Successfully",
+              });
+            }
+          });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(404).json({
+      error: "An Error Occoured",
+    });
+  }
+});
+
+app.delete("/todos/:id", (req, res) => {
+  const todoId = req.params.id;
+  try {
+    fs.readFile("./todos.json", "utf-8", (err, data) => {
+      if (err) {
+        res.status(404).json({
+          error: "An Error Occured while creating a todo",
+        });
+      } else {
+        const todos = JSON.parse(data);
+        let todo;
+        let idx;
+        for (let i = 0; i < todos.length; i++) {
+          if (todos[i]["id"] === todoId) {
+            todo = todos[i];
+            idx = i;
+            break;
+          }
+        }
+        if (todo === undefined) {
+          res.status(404).json({
+            message: "Todo Does not exist",
+          });
+        } else {
+          todos.splice(idx, 1);
+          const updatedTodos = JSON.stringify(todos, null, 2);
+          fs.writeFile("./todos.json", updatedTodos, (err) => {
+            if (err) {
+              res.status(400).json({
+                error: err,
+              });
+            } else {
+              res.status(200).json({
+                message: "Todo Deleted Successfully",
+              });
+            }
+          });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(404).json({
+      error: "An Error Occoured while deleting a todo",
+    });
+  }
+});
+
+app.get("*", (req, res) => {
+  res.sendStatus(404);
+});
+
+module.exports = app;

@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "title": "New Todo",
+    "description": "A new todo item",
+    "id": "0a418206-764a-422b-bcd8-1da64ca48781"
+  },
+  {
+    "title": "New Todo",
+    "description": "A new todo item",
+    "id": "e4e7d795-e666-4282-a53b-c5eb541d6b88"
+  },
+  {
+    "title": "New Todo",
+    "description": "A new todo item",
+    "id": "9fc2de88-0aa5-4357-8195-2b3e43f89fe4"
+  },
+  {
+    "title": "New Todo",
+    "description": "A new todo item",
+    "id": "2944c45a-a32d-41e8-a20e-9dc1ebc09401"
+  },
+  {
+    "title": "New Todo",
+    "description": "A new todo item"
+  }
+]
