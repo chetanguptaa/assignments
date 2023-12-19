@@ -17,20 +17,18 @@ setInterval(() => {
   numberOfRequestsForUser = {};
 }, 1000);
 
-const requestLimitterMid = (req, res, next) => {
-  const userId = req.header.id;
-  if (numberOfRequestsForUser.userId === 5) {
+const requestLimiterMid = (req, res, next) => {
+  const userId = req.headers.id;
+  if (numberOfRequestsForUser[userId] === 5) {
     return res.status(404).json({
-      msg: "too much requests",
+      msg: "Too many requests",
     });
-  } else
-    numberOfRequestsForUser.userId === undefined
-      ? (numberOfRequestsForUser.userId = 1)
-      : (numberOfRequestsForUser.userId += 1);
+  }
+  numberOfRequestsForUser[userId] = (numberOfRequestsForUser[userId] || 0) + 1;
   next();
 };
 
-app.use(requestLimitterMid);
+app.use(requestLimiterMid);
 
 app.get("/user", function (req, res) {
   res.status(200).json({ name: "john" });
